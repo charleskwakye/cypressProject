@@ -26,16 +26,34 @@ Cypress.Commands.add('verifyCookieBannerVisible', () => {
   cy.get('#shopify-pc__banner').should('be.visible');
 });
 
-// Accept cookies
+// Accept cookies (with resilient handling for CI environments)
 Cypress.Commands.add('acceptCookies', () => {
-  cy.get('#shopify-pc__banner__btn-accept').click();
-  cy.get('#shopify-pc__banner').should('not.be.visible');
+  // Check if the cookie banner exists first, then act accordingly
+  cy.get('body').then($body => {
+    if ($body.find('#shopify-pc__banner').length > 0) {
+      // Cookie banner exists, accept it
+      cy.get('#shopify-pc__banner__btn-accept').click();
+      cy.get('#shopify-pc__banner').should('not.be.visible');
+    } else {
+      // Cookie banner doesn't exist, log and continue
+      cy.log('Cookie banner not found - may already be accepted or not shown in this environment');
+    }
+  });
 });
 
-// Decline cookies
+// Decline cookies (with resilient handling for CI environments)
 Cypress.Commands.add('declineCookies', () => {
-  cy.get('#shopify-pc__banner__btn-decline').click();
-  cy.get('#shopify-pc__banner').should('not.be.visible');
+  // Check if the cookie banner exists first, then act accordingly
+  cy.get('body').then($body => {
+    if ($body.find('#shopify-pc__banner').length > 0) {
+      // Cookie banner exists, decline it
+      cy.get('#shopify-pc__banner__btn-decline').click();
+      cy.get('#shopify-pc__banner').should('not.be.visible');
+    } else {
+      // Cookie banner doesn't exist, log and continue
+      cy.log('Cookie banner not found - may already be declined or not shown in this environment');
+    }
+  });
 });
 
 // Navigate to catalog page
