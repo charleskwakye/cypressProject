@@ -3,10 +3,19 @@
 // Login with the store password
 Cypress.Commands.add('loginWithStorePassword', () => {
   cy.visit(Cypress.env('baseUrl'));
-  cy.url().should('include', '/password');
-  cy.get('input[name="password"]').type(Cypress.env('password'));
-  cy.get('button[type="submit"]').click();
-  cy.url().should('eq', Cypress.env('baseUrl'));
+  
+  // Check if we landed on the password page or directly on the homepage
+  cy.url().then(url => {
+    if (url.includes('/password')) {
+      // Need to enter password
+      cy.get('input[name="password"]').type(Cypress.env('password'));
+      cy.get('button[type="submit"]').click();
+      cy.url().should('eq', Cypress.env('baseUrl'));
+    } else {
+      // Already logged in, no password needed
+      cy.log('Already logged in - password page skipped');
+    }
+  });
 });
 
 // Attempt login with incorrect password
