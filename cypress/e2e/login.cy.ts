@@ -1,7 +1,7 @@
 describe('Login Functionality', () => {
   
 
-  it.only('should display error message with incorrect password', () => {
+  it('should display error message with incorrect password', () => {
     cy.attemptIncorrectPasswordLogin();
   });
 

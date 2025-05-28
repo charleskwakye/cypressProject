@@ -1,6 +1,7 @@
 import { defineConfig } from 'cypress';
 
 export default defineConfig({
+  projectId: "8uhfgv",
   env: {
     baseUrl: 'https://r0879035-realbeans.myshopify.com/',
     password: '2000',
